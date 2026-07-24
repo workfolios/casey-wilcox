@@ -1,7 +1,7 @@
 # Stage One Static Build Status
 
-- Source commit: `af54deb60c108120576da130fc084f496dcb10e4`
-- Workflow run ID: `30119448323`
+- Source commit: `ce512189fd78a9de83ad8f2cf5e3879ded663634`
+- Workflow run ID: `30124662245`
 - Build result: **success**
 - Artifact name: `stage-one-dist`
 - Indexing state: Disabled pending Casey Wilcox review
