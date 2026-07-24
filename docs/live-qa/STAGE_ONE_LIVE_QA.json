@@ -1,6 +1,6 @@
 {
   "liveUrl": "https://workfolios.github.io/casey-wilcox/",
-  "pass": false,
+  "pass": true,
   "runtimeException": "",
   "http": {
     "root": {
@@ -16,13 +16,13 @@
   },
   "assets": [
     {
-      "url": "https://workfolios.github.io/casey-wilcox/assets/index-CJHUMupi.js",
+      "url": "https://workfolios.github.io/casey-wilcox/assets/index-C0fKM2lL.js",
       "status": 200,
       "ok": true,
       "contentType": "application/javascript; charset=utf-8"
     },
     {
-      "url": "https://workfolios.github.io/casey-wilcox/assets/index-dmVzlME1.css",
+      "url": "https://workfolios.github.io/casey-wilcox/assets/index-DRGhXKG4.css",
       "status": 200,
       "ok": true,
       "contentType": "text/css; charset=utf-8"
@@ -59,12 +59,12 @@
         },
         {
           "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
-          "complete": false,
-          "naturalWidth": 0,
-          "naturalHeight": 0
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
         }
       ],
-      "allImagesLoaded": false,
+      "allImagesLoaded": true,
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
@@ -89,12 +89,12 @@
         },
         {
           "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
-          "complete": false,
-          "naturalWidth": 0,
-          "naturalHeight": 0
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
         }
       ],
-      "allImagesLoaded": false,
+      "allImagesLoaded": true,
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
@@ -119,12 +119,12 @@
         },
         {
           "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
-          "complete": false,
-          "naturalWidth": 0,
-          "naturalHeight": 0
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
         }
       ],
-      "allImagesLoaded": false,
+      "allImagesLoaded": true,
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
@@ -149,12 +149,12 @@
         },
         {
           "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
-          "complete": false,
-          "naturalWidth": 0,
-          "naturalHeight": 0
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
         }
       ],
-      "allImagesLoaded": false,
+      "allImagesLoaded": true,
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
@@ -179,12 +179,12 @@
         },
         {
           "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
-          "complete": false,
-          "naturalWidth": 0,
-          "naturalHeight": 0
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
         }
       ],
-      "allImagesLoaded": false,
+      "allImagesLoaded": true,
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
