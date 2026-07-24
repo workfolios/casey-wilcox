@@ -1,0 +1,75 @@
+name: Probe GitHub Pages Activation API
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Probe Pages API and record result
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -u
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages"
+          AUTH="Authorization: Bearer ${GH_TOKEN}"
+          ACCEPT="Accept: application/vnd.github+json"
+          VERSION="X-GitHub-Api-Version: 2022-11-28"
+
+          get_code=$(curl -sS -o /tmp/pages-get.json -w "%{http_code}" \
+            -H "$AUTH" -H "$ACCEPT" -H "$VERSION" "$API")
+
+          post_code="not-attempted"
+          post_message="not-attempted"
+          if [ "$get_code" = "404" ]; then
+            post_code=$(curl -sS -o /tmp/pages-post.json -w "%{http_code}" \
+              -X POST -H "$AUTH" -H "$ACCEPT" -H "$VERSION" \
+              "$API" -d '{"build_type":"workflow"}')
+            post_message=$(jq -r '.message // "No message returned"' /tmp/pages-post.json 2>/dev/null || echo "Unable to parse response")
+          fi
+
+          get_message=$(jq -r '.message // "Pages site exists"' /tmp/pages-get.json 2>/dev/null || echo "Unable to parse response")
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+          mkdir -p docs
+          cat > docs/PAGES_API_PROBE.md <<EOF
+          # GitHub Pages Activation API Probe
+
+          - Source commit: \`${SOURCE_SHA}\`
+          - Workflow run ID: \`${RUN_ID}\`
+          - GET Pages endpoint HTTP status: **${get_code}**
+          - GET response: ${get_message}
+          - POST activation HTTP status: **${post_code}**
+          - POST response: ${post_message}
+          EOF
+
+          git add docs/PAGES_API_PROBE.md
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Record GitHub Pages activation API probe"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          exit 1
