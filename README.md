@@ -12,23 +12,26 @@ Controlled-preview digital business card and project-based consulting website fo
 ## Local Development & Setup
 
 ### Prerequisites
-- Node.js (v20+ recommended)
+- Node.js 20+
 - npm
 
 ### Installation
 ```bash
-npm ci
+npm install --no-audit --no-fund
 ```
 
+The `predev`, `prelint`, and `prebuild` hooks reconstruct the deployment-optimized image assets from the committed `.assets-src/` files. This avoids the binary corruption introduced by the Google AI Studio export while preserving the approved master-image compositions.
+
 ### Environment Configuration
-Copy `.env.example` to `.env` or `.env.local`:
+Copy `.env.example` to `.env.local`:
 ```bash
 cp .env.example .env.local
 ```
 
 Required variable:
-- `VITE_FORMSPREE_FORM_ID`: Formspree form ID owned or controlled by `casewilcox@gmail.com`.
-  *Note: When this variable is absent or unset, the contact form will operate in safe inactive mode and present a clear configuration notice upon submit attempt.*
+- `VITE_FORMSPREE_FORM_ID`: verified Formspree form ID configured to deliver submissions to `casewilcox@gmail.com`.
+
+When this variable is absent, the form stays in safe inactive mode, sends no network request, preserves entered data, and presents an accessible configuration message.
 
 ### Local Server
 ```bash
@@ -37,6 +40,7 @@ npm run dev
 
 ### Build & Preview
 ```bash
+npm run lint
 npm run build
 npm run preview
 ```
@@ -44,6 +48,6 @@ npm run preview
 ## Deployment Readiness & Activation Notes
 - **Deployment Target**: `workfolios/casey-wilcox`
 - **Preview URL**: `https://workfolios.github.io/casey-wilcox/`
-- **Deployment Status**: Automated deployment via GitHub Actions is configured in `.github/workflows/deploy-pages.yml`.
-- **Form Activation Requirement**: Final public site launch and live contact channel delivery remain blocked until a verified Formspree form ID is supplied and delivery to `casewilcox@gmail.com` is verified.
-- **Public Release**: Subject to explicit approval and confirmation by Casey Wilcox.
+- **Deployment Method**: GitHub Actions workflow in `.github/workflows/deploy-pages.yml`
+- **Form Activation Requirement**: live submission remains blocked until the Formspree ID is configured and Gmail delivery is verified
+- **Public Release**: subject to explicit Casey Wilcox confirmation and final release approval
