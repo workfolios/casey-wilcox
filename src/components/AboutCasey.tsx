@@ -39,7 +39,7 @@ export default function AboutCasey() {
                 width="480"
                 height="480"
                 className="w-full h-auto object-cover border border-line"
-                loading="lazy"
+                loading="eager"
                 decoding="async"
               />
             </div>
