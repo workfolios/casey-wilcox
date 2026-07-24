@@ -1,0 +1,91 @@
+name: Verify Stage One Live Preview
+
+on:
+  workflow_run:
+    workflows: ["Publish Stage One Preview Branch"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  live-qa:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install isolated browser-QA runtime
+        run: |
+          mkdir -p /tmp/casey-live-qa
+          cp scripts/live-stage-one-qa.mjs /tmp/casey-live-qa/live-stage-one-qa.mjs
+          cd /tmp/casey-live-qa
+          npm init -y
+          npm install playwright@1.55.0 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Run live HTTP and responsive browser QA
+        env:
+          LIVE_URL: https://workfolios.github.io/casey-wilcox/
+          QA_OUTPUT: ${{ github.workspace }}/qa-output
+        run: |
+          cd /tmp/casey-live-qa
+          node live-stage-one-qa.mjs
+
+      - name: Upload browser-QA evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-one-live-qa
+          path: qa-output/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Record live-QA result
+        if: ${{ always() && hashFiles('qa-output/report.md') != '' }}
+        env:
+          QA_RUN_ID: ${{ github.run_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
+
+          mkdir -p docs/live-qa
+          cp qa-output/report.md docs/live-qa/STAGE_ONE_LIVE_QA.md
+          cp qa-output/results.json docs/live-qa/STAGE_ONE_LIVE_QA.json
+
+          if [ ! -f docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt ]; then
+            printf '%s\n' "$QA_RUN_ID" > docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt
+          fi
+
+          git add docs/live-qa
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+
+          git commit -m "Record Stage One live browser QA result"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            git fetch origin main
+            git rebase origin/main
+          done
+          exit 1
+
+      - name: Enforce live-QA gate
+        if: ${{ always() }}
+        run: |
+          node -e "const fs=require('fs'); const p='qa-output/results.json'; if(!fs.existsSync(p)) process.exit(1); const r=JSON.parse(fs.readFileSync(p,'utf8')); if(!r.pass) process.exit(1);"
