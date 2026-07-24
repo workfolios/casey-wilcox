@@ -4,10 +4,10 @@ Controlled-preview digital business card and project-based consulting website fo
 
 ## Overview
 - **Project Name**: Casey Wilcox Digital Business Card Website
-- **Status**: Controlled Preview (Shared for feedback only; not publicly launched)
+- **Status**: Stage One Controlled Preview Deployment Authorized
 - **Framework & Tech Stack**: React 19, TypeScript, Vite, Tailwind CSS v4, `@formspree/react`, Lucide React
 - **Base Path**: `/casey-wilcox/` (Configured for GitHub Pages deployment)
-- **Indexing Status**: `noindex, nofollow, noarchive, nosnippet` (Blocked from web crawlers)
+- **Indexing Status**: `noindex, nofollow, noarchive, nosnippet` (Blocked from web crawlers pending Casey review)
 
 ## Local Development & Setup
 
@@ -28,7 +28,7 @@ Copy `.env.example` to `.env.local`:
 cp .env.example .env.local
 ```
 
-Required variable:
+Optional Stage One variable:
 - `VITE_FORMSPREE_FORM_ID`: verified Formspree form ID configured to deliver submissions to `casewilcox@gmail.com`.
 
 When this variable is absent, the form stays in safe inactive mode, sends no network request, preserves entered data, and presents an accessible configuration message.
@@ -48,6 +48,10 @@ npm run preview
 ## Deployment Readiness & Activation Notes
 - **Deployment Target**: `workfolios/casey-wilcox`
 - **Preview URL**: `https://workfolios.github.io/casey-wilcox/`
-- **Deployment Method**: GitHub Actions workflow in `.github/workflows/deploy-pages.yml`
+- **Static Build Status**: Passed
+- **Published Branch**: `gh-pages`
+- **Deployment Method**: `.github/workflows/publish-gh-pages-branch.yml` builds and publishes `dist` to the `gh-pages` branch
+- **Required Repository Setting**: GitHub Pages must use `Deploy from a branch`, branch `gh-pages`, folder `/(root)`
 - **Form Activation Requirement**: live submission remains blocked until the Formspree ID is configured and Gmail delivery is verified
+- **SEO Release**: crawler restrictions remain active until Casey reviews and approves the website
 - **Public Release**: subject to explicit Casey Wilcox confirmation and final release approval
