@@ -8,33 +8,33 @@
 
 - Root page HTTP 200: **Pass**
 - Root application mount present: **Pass**
-- Correct `/casey-wilcox/` production paths: **Fail**
+- Correct `/casey-wilcox/` production paths: **Pass**
 - Controlled-preview noindex directive present: **Pass**
-- Referenced CSS, JavaScript, robots, and social-preview assets: **Fail**
+- Referenced CSS, JavaScript, robots, and social-preview assets: **Pass**
 
 ## Responsive Browser Verification
 
 | Viewport | HTTP | Overflow | Images | Required Sections |
 |---|---:|---|---|---|
-| desktop-1440 (1440×900) | 0 | Fail | Fail | Fail |
-| desktop-1024 (1024×900) | 0 | Fail | Fail | Fail |
-| tablet-768 (768×1024) | 0 | Fail | Fail | Fail |
-| mobile-390 (390×844) | 0 | Fail | Fail | Fail |
-| mobile-320 (320×720) | 0 | Fail | Fail | Fail |
+| desktop-1440 (1440×900) | 200 | Pass | Fail | Pass |
+| desktop-1024 (1024×900) | 200 | Pass | Fail | Pass |
+| tablet-768 (768×1024) | 200 | Pass | Fail | Pass |
+| mobile-390 (390×844) | 200 | Pass | Fail | Pass |
+| mobile-320 (320×720) | 200 | Pass | Fail | Pass |
 
 ## Interaction And Accessibility Verification
 
-- Skip link moves focus to main content: **Fail**
-- Mobile navigation opens, closes, and restores state: **Fail**
-- LinkedIn destination is Casey's approved profile: **Fail**
-- Contact-form button label is `Submit`: **Fail**
-- All primary section anchors are present: **Fail**
+- Skip link moves focus to main content: **Pass**
+- Mobile navigation opens, closes, and restores state: **Pass**
+- LinkedIn destination is Casey's approved profile: **Pass**
+- Contact-form button label is `Submit`: **Pass**
+- All primary section anchors are present: **Pass**
 
 ## Runtime Verification
 
-- Browser-console errors: **5**
+- Browser-console errors: **0**
 - Unhandled page errors: **0**
-- Failed network requests: **5**
+- Failed network requests: **0**
 - QA runtime exception: **None**
 
 The Stage One controlled preview is not ready to share. Review the JSON results and screenshot evidence from the workflow artifact.

@@ -12,20 +12,32 @@
   "sourceChecks": {
     "rootMountPresent": true,
     "noindexPresent": true,
-    "correctBasePath": false
+    "correctBasePath": true
   },
   "assets": [
     {
+      "url": "https://workfolios.github.io/casey-wilcox/assets/index-CJHUMupi.js",
+      "status": 200,
+      "ok": true,
+      "contentType": "application/javascript; charset=utf-8"
+    },
+    {
+      "url": "https://workfolios.github.io/casey-wilcox/assets/index-dmVzlME1.css",
+      "status": 200,
+      "ok": true,
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
       "url": "https://workfolios.github.io/casey-wilcox/robots.txt",
-      "status": 404,
-      "ok": false,
-      "contentType": "text/html; charset=utf-8"
+      "status": 200,
+      "ok": true,
+      "contentType": "text/plain; charset=utf-8"
     },
     {
       "url": "https://workfolios.github.io/casey-wilcox/casey-wilcox-social-preview.webp",
-      "status": 404,
-      "ok": false,
-      "contentType": "text/html; charset=utf-8"
+      "status": 200,
+      "ok": true,
+      "contentType": "image/webp"
     }
   ],
   "viewports": [
@@ -33,78 +45,161 @@
       "name": "desktop-1440",
       "width": 1440,
       "height": 900,
-      "responseStatus": 0,
-      "horizontalOverflow": true,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": false,
+          "naturalWidth": 0,
+          "naturalHeight": 0
+        }
+      ],
       "allImagesLoaded": false,
-      "requiredSectionsPresent": false,
-      "h1": "",
-      "browserError": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main#main-content') to be visible\n"
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "responseStatus": 200,
+      "browserError": ""
     },
     {
       "name": "desktop-1024",
       "width": 1024,
       "height": 900,
-      "responseStatus": 0,
-      "horizontalOverflow": true,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": false,
+          "naturalWidth": 0,
+          "naturalHeight": 0
+        }
+      ],
       "allImagesLoaded": false,
-      "requiredSectionsPresent": false,
-      "h1": "",
-      "browserError": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main#main-content') to be visible\n"
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "responseStatus": 200,
+      "browserError": ""
     },
     {
       "name": "tablet-768",
       "width": 768,
       "height": 1024,
-      "responseStatus": 0,
-      "horizontalOverflow": true,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": false,
+          "naturalWidth": 0,
+          "naturalHeight": 0
+        }
+      ],
       "allImagesLoaded": false,
-      "requiredSectionsPresent": false,
-      "h1": "",
-      "browserError": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main#main-content') to be visible\n"
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "responseStatus": 200,
+      "browserError": ""
     },
     {
       "name": "mobile-390",
       "width": 390,
       "height": 844,
-      "responseStatus": 0,
-      "horizontalOverflow": true,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": false,
+          "naturalWidth": 0,
+          "naturalHeight": 0
+        }
+      ],
       "allImagesLoaded": false,
-      "requiredSectionsPresent": false,
-      "h1": "",
-      "browserError": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main#main-content') to be visible\n"
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "responseStatus": 200,
+      "browserError": ""
     },
     {
       "name": "mobile-320",
       "width": 320,
       "height": 720,
-      "responseStatus": 0,
-      "horizontalOverflow": true,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": false,
+          "naturalWidth": 0,
+          "naturalHeight": 0
+        }
+      ],
       "allImagesLoaded": false,
-      "requiredSectionsPresent": false,
-      "h1": "",
-      "browserError": "TimeoutError: page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('main#main-content') to be visible\n"
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "responseStatus": 200,
+      "browserError": ""
     }
   ],
   "interactions": {
-    "skipLink": false,
-    "mobileMenuOpenClose": false,
-    "linkedInTarget": false,
-    "submitLabel": false,
-    "sectionAnchors": false
+    "skipLink": true,
+    "mobileMenuOpenClose": true,
+    "linkedInTarget": true,
+    "submitLabel": true,
+    "sectionAnchors": true
   },
-  "consoleErrors": [
-    "desktop-1440: Failed to load resource: the server responded with a status of 404 ()",
-    "desktop-1024: Failed to load resource: the server responded with a status of 404 ()",
-    "tablet-768: Failed to load resource: the server responded with a status of 404 ()",
-    "mobile-390: Failed to load resource: the server responded with a status of 404 ()",
-    "mobile-320: Failed to load resource: the server responded with a status of 404 ()"
-  ],
+  "consoleErrors": [],
   "pageErrors": [],
-  "failedRequests": [
-    "desktop-1440: https://workfolios.github.io/src/main.tsx — net::ERR_ABORTED",
-    "desktop-1024: https://workfolios.github.io/src/main.tsx — net::ERR_ABORTED",
-    "tablet-768: https://workfolios.github.io/src/main.tsx — net::ERR_ABORTED",
-    "mobile-390: https://workfolios.github.io/src/main.tsx — net::ERR_ABORTED",
-    "mobile-320: https://workfolios.github.io/src/main.tsx — net::ERR_ABORTED"
-  ]
+  "failedRequests": []
 }
