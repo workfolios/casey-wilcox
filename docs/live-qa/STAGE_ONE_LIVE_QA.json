@@ -1,6 +1,6 @@
 {
   "liveUrl": "https://workfolios.github.io/casey-wilcox/",
-  "pass": true,
+  "pass": false,
   "runtimeException": "",
   "http": {
     "root": {
@@ -42,6 +42,7 @@
   ],
   "viewports": [
     {
+      "engine": "chromium",
       "name": "desktop-1440",
       "width": 1440,
       "height": 900,
@@ -68,10 +69,13 @@
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
       "responseStatus": 200,
       "browserError": ""
     },
     {
+      "engine": "chromium",
       "name": "desktop-1024",
       "width": 1024,
       "height": 900,
@@ -98,10 +102,13 @@
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
       "responseStatus": 200,
       "browserError": ""
     },
     {
+      "engine": "chromium",
       "name": "tablet-768",
       "width": 768,
       "height": 1024,
@@ -128,10 +135,13 @@
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
       "responseStatus": 200,
       "browserError": ""
     },
     {
+      "engine": "chromium",
       "name": "mobile-390",
       "width": 390,
       "height": 844,
@@ -158,10 +168,13 @@
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
       "responseStatus": 200,
       "browserError": ""
     },
     {
+      "engine": "chromium",
       "name": "mobile-320",
       "width": 320,
       "height": 720,
@@ -188,6 +201,140 @@
       "requiredSectionsPresent": true,
       "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
       "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
+      "responseStatus": 200,
+      "browserError": ""
+    },
+    {
+      "engine": "firefox",
+      "name": "desktop-1440",
+      "width": 1440,
+      "height": 900,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
+        }
+      ],
+      "allImagesLoaded": true,
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
+      "responseStatus": 200,
+      "browserError": ""
+    },
+    {
+      "engine": "firefox",
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
+        }
+      ],
+      "allImagesLoaded": true,
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
+      "responseStatus": 200,
+      "browserError": ""
+    },
+    {
+      "engine": "webkit",
+      "name": "desktop-1440",
+      "width": 1440,
+      "height": 900,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
+        }
+      ],
+      "allImagesLoaded": true,
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
+      "responseStatus": 200,
+      "browserError": ""
+    },
+    {
+      "engine": "webkit",
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844,
+      "title": "Casey Wilcox | Digital Presence, Inquiry Handling And Client Follow-Up",
+      "h1": "Refining the digital touchpoints where client interest meets action.",
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "horizontalOverflow": false,
+      "images": [
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-portrait-4x5-BOY3nI_x.webp",
+          "complete": true,
+          "naturalWidth": 480,
+          "naturalHeight": 600
+        },
+        {
+          "src": "https://workfolios.github.io/casey-wilcox/assets/casey-wilcox-bio-square-CsqJAVBH.webp",
+          "complete": true,
+          "naturalWidth": 400,
+          "naturalHeight": 400
+        }
+      ],
+      "allImagesLoaded": true,
+      "requiredSectionsPresent": true,
+      "linkedInHref": "https://www.linkedin.com/in/casey-wilcox/",
+      "submitText": "Submit",
+      "heroConnectHref": "",
+      "headerPosition": "relative",
       "responseStatus": 200,
       "browserError": ""
     }
@@ -197,7 +344,19 @@
     "mobileMenuOpenClose": true,
     "linkedInTarget": true,
     "submitLabel": true,
-    "sectionAnchors": true
+    "sectionAnchors": true,
+    "stickyHeader": false,
+    "activeSectionNav": false,
+    "heroConnect": false,
+    "reducedMotion": false
+  },
+  "formDelivery": {
+    "required": true,
+    "attempted": true,
+    "accepted": false,
+    "responseStatus": 0,
+    "confirmationVisible": false,
+    "error": "TimeoutError: page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\""
   },
   "consoleErrors": [],
   "pageErrors": [],
