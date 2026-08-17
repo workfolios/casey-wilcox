@@ -64,6 +64,10 @@ textarea:focus-visible {
   outline-offset: 3px !important;
 }
 
+section[id] {
+  scroll-margin-top: 6.5rem;
+}
+
 .editorial-gap {
   margin-bottom: 3rem;
 }
@@ -71,6 +75,10 @@ textarea:focus-visible {
 @media (min-width: 768px) {
   .editorial-gap {
     margin-bottom: 3.5rem;
+  }
+
+  section[id] {
+    scroll-margin-top: 7rem;
   }
 }
 
@@ -80,7 +88,7 @@ textarea:focus-visible {
   }
 }
 
-a, 
+a,
 button,
 input,
 select,
@@ -101,6 +109,21 @@ h1, h2, h3 {
 
 p, li {
   text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @media print {
