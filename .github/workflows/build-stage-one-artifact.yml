@@ -33,6 +33,9 @@ jobs:
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Audit locked dependency graph
+        run: npm audit --audit-level=high
+
       - name: TypeScript validation
         run: npm run lint
 
