@@ -7,54 +7,82 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   live-qa:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: main
-          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
         with:
-          node-version: 20
+          node-version: 20.19.5
+          cache: npm
 
-      - name: Install isolated browser-QA runtime
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Determine one-time Formspree acceptance check
+        id: form_delivery
         run: |
-          mkdir -p /tmp/casey-live-qa
-          cp scripts/live-stage-one-qa.mjs /tmp/casey-live-qa/live-stage-one-qa.mjs
-          cd /tmp/casey-live-qa
-          npm init -y
-          npm install playwright@1.55.0 --no-audit --no-fund
-          npx playwright install --with-deps chromium
+          if [ -f docs/live-qa/FORM_DELIVERY_ACCEPTED.md ]; then
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Run live HTTP and responsive browser QA
+      - name: Install representative browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run live HTTP, responsive, interaction, browser, and form QA
         env:
           LIVE_URL: https://workfolios.github.io/casey-wilcox/
           QA_OUTPUT: ${{ github.workspace }}/qa-output
-        run: |
-          cd /tmp/casey-live-qa
-          node live-stage-one-qa.mjs
+          FORM_DELIVERY_TEST_REQUIRED: ${{ steps.form_delivery.outputs.required }}
+        run: node scripts/live-stage-one-qa.mjs
 
       - name: Upload browser-QA evidence
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: stage-one-live-qa
           path: qa-output/
           if-no-files-found: warn
           retention-days: 30
 
+      - name: Enforce live-QA gate
+        if: ${{ always() }}
+        run: |
+          node -e "const fs=require('fs'); const p='qa-output/results.json'; if(!fs.existsSync(p)) process.exit(1); const r=JSON.parse(fs.readFileSync(p,'utf8')); if(!r.pass) process.exit(1);"
+
+  record:
+    if: ${{ always() && needs.live-qa.result != 'skipped' }}
+    needs: live-qa
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download browser-QA evidence
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: stage-one-live-qa
+          path: qa-output
+
       - name: Record live-QA result
-        if: ${{ always() && hashFiles('qa-output/report.md') != '' }}
         env:
           QA_RUN_ID: ${{ github.run_id }}
         run: |
@@ -68,6 +96,17 @@ jobs:
 
           if [ ! -f docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt ]; then
             printf '%s\n' "$QA_RUN_ID" > docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt
+          fi
+
+          if node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('qa-output/results.json','utf8')); process.exit(r.formDelivery?.attempted && r.formDelivery?.accepted && r.formDelivery?.confirmationVisible ? 0 : 1)"; then
+            cat > docs/live-qa/FORM_DELIVERY_ACCEPTED.md <<EOF
+          # Formspree Provider Acceptance Verification
+
+          - Workflow run ID: \`${QA_RUN_ID}\`
+          - Controlled submission: **Accepted by provider**
+          - On-page confirmation: **Visible**
+          - Human receipt confirmation: **Pending owner confirmation**
+          EOF
           fi
 
           git add docs/live-qa
@@ -84,8 +123,3 @@ jobs:
             git rebase origin/main
           done
           exit 1
-
-      - name: Enforce live-QA gate
-        if: ${{ always() }}
-        run: |
-          node -e "const fs=require('fs'); const p='qa-output/results.json'; if(!fs.existsSync(p)) process.exit(1); const r=JSON.parse(fs.readFileSync(p,'utf8')); if(!r.pass) process.exit(1);"

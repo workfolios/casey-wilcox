@@ -12,15 +12,15 @@ export default function SupportAreas() {
   const developingService = SERVICES_DATA.find(s => s.prominence === "developing")!;
 
   return (
-    <section 
-      id="support-areas" 
+    <section
+      id="support-areas"
       className="bg-white text-charcoal pt-10 pb-8 md:pt-16 md:pb-12 lg:py-24"
       aria-labelledby="support-heading"
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="max-w-3xl mb-8 md:mb-10 lg:mb-16 flex flex-col">
-          <h2 
-            id="support-heading" 
+          <h2
+            id="support-heading"
             className="font-serif text-[32px] md:text-[40px] lg:text-[52px] font-normal leading-[1.1] md:leading-[1.08] tracking-tight text-charcoal"
           >
             Practical reviews for communication, inquiries, and follow-through.
@@ -29,11 +29,11 @@ export default function SupportAreas() {
             The current support direction is intentionally narrow. It focuses on clarity, documentation, and practical next steps rather than full-service marketing, technical implementation, or ongoing sales management.
           </p>
         </div>
-  
+
         <div className="flex flex-col space-y-6 md:space-y-8 lg:space-y-12">
-          <div 
+          <div
             id={primaryService.id}
-            className="border-t-4 border-t-wine-700 hover:border-t-wine-800 border-x border-b border-line bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6 lg:space-y-8 transition-all duration-200 [@media(hover:hover)]:hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 motion-reduce:transition-none"
+            className="border-t-4 border-t-wine-700 border-x border-b border-line bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6 lg:space-y-8"
             role="region"
             aria-labelledby="primary-service-title"
           >
@@ -46,8 +46,8 @@ export default function SupportAreas() {
                   Strongest Focus
                 </span>
               </div>
-              <h3 
-                id="primary-service-title" 
+              <h3
+                id="primary-service-title"
                 className="font-serif text-2xl md:text-3xl lg:text-[34px] font-normal text-charcoal leading-[1.1]"
               >
                 {primaryService.title}
@@ -81,9 +81,9 @@ export default function SupportAreas() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-            <div 
+            <div
               id={secondaryService.id}
-              className="lg:col-span-7 border border-line border-l-[3px] border-l-denim-600 hover:border-l-denim-700 bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6 transition-all duration-200 [@media(hover:hover)]:hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 motion-reduce:transition-none"
+              className="lg:col-span-7 border border-line border-l-[3px] border-l-denim-600 bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6"
               role="region"
               aria-labelledby="secondary-service-title"
             >
@@ -91,8 +91,8 @@ export default function SupportAreas() {
                 <span className="font-sans text-sm font-bold uppercase tracking-wider text-denim-700">
                   {secondaryService.label}
                 </span>
-                <h3 
-                  id="secondary-service-title" 
+                <h3
+                  id="secondary-service-title"
                   className="font-serif text-2xl md:text-3xl lg:text-[32px] font-normal text-charcoal leading-[1.1]"
                 >
                   {secondaryService.title}
@@ -123,9 +123,9 @@ export default function SupportAreas() {
               </div>
             </div>
 
-            <div 
+            <div
               id={developingService.id}
-              className="lg:col-span-5 border border-dashed border-line hover:border-denim-600 bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6 relative transition-all duration-200 [@media(hover:hover)]:hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 motion-reduce:transition-none"
+              className="lg:col-span-5 border border-dashed border-line bg-white p-5 md:p-8 lg:p-10 shadow-sm flex flex-col space-y-5 md:space-y-6 relative"
               role="region"
               aria-labelledby="developing-service-title"
             >
@@ -133,8 +133,8 @@ export default function SupportAreas() {
                 <span className="font-sans text-sm font-bold uppercase tracking-wider text-wine-700">
                   {developingService.label}
                 </span>
-                <h3 
-                  id="developing-service-title" 
+                <h3
+                  id="developing-service-title"
                   className="font-serif text-2xl md:text-3xl lg:text-[32px] font-normal text-charcoal leading-[1.1]"
                 >
                   {developingService.title}
