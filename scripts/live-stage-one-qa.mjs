@@ -45,7 +45,21 @@ const results = {
   },
   sourceChecks: {
     rootMountPresent: Boolean(rootResponse?.body.includes('<div id="root"></div>')),
-    noindexPresent: Boolean(rootResponse?.body.includes("noindex, nofollow, noarchive, nosnippet")),
+    indexingReleased: Boolean(
+      rootResponse?.body.includes('name="robots" content="index, follow"') &&
+      !rootResponse?.body.includes("noindex")
+    ),
+    canonicalPresent: Boolean(
+      rootResponse?.body.includes('rel="canonical" href="https://workfolios.github.io/casey-wilcox/"')
+    ),
+    structuredDataPresent: Boolean(
+      rootResponse?.body.includes('application/ld+json') &&
+      rootResponse?.body.includes('"@type": "WebPage"') &&
+      rootResponse?.body.includes('"@type": "Person"') &&
+      rootResponse?.body.includes('https://www.linkedin.com/in/casey-wilcox/')
+    ),
+    robotsAllowsCrawling: false,
+    sitemapPublished: false,
     correctBasePath: Boolean(rootResponse?.body.includes('/casey-wilcox/assets/')),
   },
   assets: [],
@@ -96,7 +110,29 @@ try {
     for (const match of rootResponse.body.matchAll(assetPattern)) {
       assetUrls.push(new URL(match[1], liveUrl).href);
     }
-    assetUrls.push(new URL("robots.txt", liveUrl).href);
+
+    const robotsUrl = new URL("robots.txt", liveUrl).href;
+    const sitemapUrl = new URL("sitemap.xml", liveUrl).href;
+    const robotsResponse = await fetchStatus(robotsUrl);
+    const sitemapResponse = await fetchStatus(sitemapUrl);
+
+    results.sourceChecks.robotsAllowsCrawling = Boolean(
+      robotsResponse.ok &&
+      robotsResponse.status === 200 &&
+      robotsResponse.body.includes("User-agent: *") &&
+      robotsResponse.body.includes("Allow: /") &&
+      !robotsResponse.body.includes("Disallow: /") &&
+      robotsResponse.body.includes("Sitemap: https://workfolios.github.io/casey-wilcox/sitemap.xml")
+    );
+    results.sourceChecks.sitemapPublished = Boolean(
+      sitemapResponse.ok &&
+      sitemapResponse.status === 200 &&
+      sitemapResponse.body.includes("<urlset") &&
+      sitemapResponse.body.includes("<loc>https://workfolios.github.io/casey-wilcox/</loc>")
+    );
+
+    assetUrls.push(robotsUrl);
+    assetUrls.push(sitemapUrl);
     assetUrls.push(new URL("casey-wilcox-social-preview.webp", liveUrl).href);
 
     for (const assetUrl of [...new Set(assetUrls)]) {
@@ -294,7 +330,7 @@ try {
   results.runtimeException = String(error?.stack || error);
 }
 
-const allAssetsPass = results.assets.length >= 4 && results.assets.every((asset) => asset.ok && asset.status === 200);
+const allAssetsPass = results.assets.length >= 5 && results.assets.every((asset) => asset.ok && asset.status === 200);
 const allViewportsPass = results.viewports.length === 9 && results.viewports.every((viewport) =>
   viewport.responseStatus === 200 &&
   !viewport.horizontalOverflow &&
@@ -315,7 +351,11 @@ results.pass = Boolean(
   results.http.root.ok &&
   results.http.root.status === 200 &&
   results.sourceChecks.rootMountPresent &&
-  results.sourceChecks.noindexPresent &&
+  results.sourceChecks.indexingReleased &&
+  results.sourceChecks.canonicalPresent &&
+  results.sourceChecks.structuredDataPresent &&
+  results.sourceChecks.robotsAllowsCrawling &&
+  results.sourceChecks.sitemapPublished &&
   results.sourceChecks.correctBasePath &&
   allAssetsPass &&
   allViewportsPass &&
@@ -331,7 +371,7 @@ const status = (value) => value ? "Pass" : "Fail";
 const formDeliveryStatus = results.formDelivery.required
   ? status(formDeliveryPass)
   : "Previously accepted / not repeated";
-const report = `# Stage One Live Preview QA\n\n- **Live URL:** ${liveUrl}\n- **Overall result:** **${results.pass ? "PASS" : "FAIL"}**\n- **Indexing state:** Disabled pending Casey Wilcox review\n\n## HTTP And Asset Verification\n\n- Root page HTTP 200: **${status(results.http.root.status === 200)}**\n- Root application mount present: **${status(results.sourceChecks.rootMountPresent)}**\n- Correct \`/casey-wilcox/\` production paths: **${status(results.sourceChecks.correctBasePath)}**\n- Controlled-preview noindex directive present: **${status(results.sourceChecks.noindexPresent)}**\n- Referenced CSS, JavaScript, robots, and social-preview assets: **${status(allAssetsPass)}**\n\n## Responsive And Browser Verification\n\n| Engine | Viewport | HTTP | Overflow | Images | Required Sections |\n|---|---|---:|---|---|---|\n${results.viewports.map((viewport) => `| ${viewport.engine} | ${viewport.name} (${viewport.width}×${viewport.height}) | ${viewport.responseStatus} | ${status(!viewport.horizontalOverflow)} | ${status(viewport.allImagesLoaded)} | ${status(viewport.requiredSectionsPresent)} |`).join("\n")}\n\n## Interaction And Accessibility Verification\n\n- Skip link moves focus to main content: **${status(results.interactions.skipLink)}**\n- Mobile navigation opens, closes, and restores state: **${status(results.interactions.mobileMenuOpenClose)}**\n- Sticky header is active: **${status(results.interactions.stickyHeader)}**\n- Current-section navigation state updates: **${status(results.interactions.activeSectionNav)}**\n- Hero exposes approved \`Connect\` destination: **${status(results.interactions.heroConnect)}**\n- Reduced-motion preference suppresses authored transition duration: **${status(results.interactions.reducedMotion)}**\n- LinkedIn destination is Casey's approved profile: **${status(results.interactions.linkedInTarget)}**\n- Contact-form button label is \`Submit\`: **${status(results.interactions.submitLabel)}**\n- All primary section anchors are present: **${status(results.interactions.sectionAnchors)}**\n\n## Formspree Delivery Acceptance Verification\n\n- One-time provider acceptance check: **${formDeliveryStatus}**\n- Submission attempted this run: **${results.formDelivery.attempted ? "Yes" : "No"}**\n- Provider response status: **${results.formDelivery.responseStatus || "N/A"}**\n- On-page success confirmation visible: **${status(results.formDelivery.confirmationVisible || !results.formDelivery.required)}**\n- Delivery-test runtime error: **${results.formDelivery.error || "None"}**\n\n## Runtime Verification\n\n- Browser-console errors: **${results.consoleErrors.length}**\n- Unhandled page errors: **${results.pageErrors.length}**\n- Failed network requests: **${results.failedRequests.length}**\n- QA runtime exception: **${results.runtimeException ? "Present" : "None"}**\n\n${results.pass ? "The Stage One controlled preview passed the governed live experience and technical verification gate." : "The Stage One controlled preview did not pass the governed live gate. Review the JSON results and screenshot evidence from the workflow artifact."}\n`;
+const report = `# Casey Wilcox Public Search Live QA\n\n- **Live URL:** ${liveUrl}\n- **Overall result:** **${results.pass ? "PASS" : "FAIL"}**\n- **Indexing state:** Enabled for public crawling and indexing\n\n## HTTP, Search Discovery And Asset Verification\n\n- Root page HTTP 200: **${status(results.http.root.status === 200)}**\n- Root application mount present: **${status(results.sourceChecks.rootMountPresent)}**\n- Correct \`/casey-wilcox/\` production paths: **${status(results.sourceChecks.correctBasePath)}**\n- Public \`index, follow\` directive present with no \`noindex\`: **${status(results.sourceChecks.indexingReleased)}**\n- Self-referential canonical present: **${status(results.sourceChecks.canonicalPresent)}**\n- Verified WebPage + Person structured data present: **${status(results.sourceChecks.structuredDataPresent)}**\n- \`robots.txt\` allows crawling and advertises sitemap: **${status(results.sourceChecks.robotsAllowsCrawling)}**\n- \`sitemap.xml\` publishes canonical Casey URL: **${status(results.sourceChecks.sitemapPublished)}**\n- Referenced CSS, JavaScript, robots, sitemap, and social-preview assets: **${status(allAssetsPass)}**\n\n## Responsive And Browser Verification\n\n| Engine | Viewport | HTTP | Overflow | Images | Required Sections |\n|---|---|---:|---|---|---|\n${results.viewports.map((viewport) => `| ${viewport.engine} | ${viewport.name} (${viewport.width}×${viewport.height}) | ${viewport.responseStatus} | ${status(!viewport.horizontalOverflow)} | ${status(viewport.allImagesLoaded)} | ${status(viewport.requiredSectionsPresent)} |`).join("\n")}\n\n## Interaction And Accessibility Verification\n\n- Skip link moves focus to main content: **${status(results.interactions.skipLink)}**\n- Mobile navigation opens, closes, and restores state: **${status(results.interactions.mobileMenuOpenClose)}**\n- Sticky header is active: **${status(results.interactions.stickyHeader)}**\n- Current-section navigation state updates: **${status(results.interactions.activeSectionNav)}**\n- Hero exposes approved \`Connect\` destination: **${status(results.interactions.heroConnect)}**\n- Reduced-motion preference suppresses authored transition duration: **${status(results.interactions.reducedMotion)}**\n- LinkedIn destination is Casey's approved profile: **${status(results.interactions.linkedInTarget)}**\n- Contact-form button label is \`Submit\`: **${status(results.interactions.submitLabel)}**\n- All primary section anchors are present: **${status(results.interactions.sectionAnchors)}**\n\n## Formspree Delivery Acceptance Verification\n\n- One-time provider acceptance check: **${formDeliveryStatus}**\n- Submission attempted this run: **${results.formDelivery.attempted ? "Yes" : "No"}**\n- Provider response status: **${results.formDelivery.responseStatus || "N/A"}**\n- On-page success confirmation visible: **${status(results.formDelivery.confirmationVisible || !results.formDelivery.required)}**\n- Delivery-test runtime error: **${results.formDelivery.error || "None"}**\n\n## Runtime Verification\n\n- Browser-console errors: **${results.consoleErrors.length}**\n- Unhandled page errors: **${results.pageErrors.length}**\n- Failed network requests: **${results.failedRequests.length}**\n- QA runtime exception: **${results.runtimeException ? "Present" : "None"}**\n\n${results.pass ? "The Casey Wilcox public-search release passed the governed live SEO, experience, and technical verification gate." : "The Casey Wilcox public-search release did not pass the governed live gate. Review the JSON results and screenshot evidence from the workflow artifact."}\n`;
 
 await writeFile(resolve(outputDir, "results.json"), `${JSON.stringify(results, null, 2)}\n`, "utf8");
 await writeFile(resolve(outputDir, "report.md"), report, "utf8");
