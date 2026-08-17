@@ -58,6 +58,14 @@ jobs:
           test -f dist/robots.txt
           grep -q '/casey-wilcox/' dist/index.html
           grep -q 'noindex, nofollow, noarchive, nosnippet' dist/index.html
+          grep -q 'name="description"' dist/index.html
+          grep -q 'rel="canonical" href="https://workfolios.github.io/casey-wilcox/"' dist/index.html
+          grep -q 'property="og:site_name" content="Casey Wilcox"' dist/index.html
+          grep -q 'name="twitter:image:alt"' dist/index.html
+          grep -q 'application/ld+json' dist/index.html
+          grep -q '"@type": "WebPage"' dist/index.html
+          grep -q '"@type": "Person"' dist/index.html
+          grep -q 'https://www.linkedin.com/in/casey-wilcox/' dist/index.html
 
       - name: Upload validated publication artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
