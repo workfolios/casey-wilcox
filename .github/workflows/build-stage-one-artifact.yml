@@ -36,6 +36,9 @@ jobs:
       - name: Audit locked dependency graph
         run: npm audit --audit-level=high
 
+      - name: Validate browser-QA script syntax
+        run: node --check scripts/live-stage-one-qa.mjs
+
       - name: TypeScript validation
         run: npm run lint
 
