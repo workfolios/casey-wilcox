@@ -40,9 +40,9 @@
 
 ## Formspree Delivery Acceptance Verification
 
-- One-time provider acceptance check: **Pass**
-- Submission attempted this run: **Yes**
-- Provider response status: **200**
+- One-time provider acceptance check: **Previously accepted / not repeated**
+- Submission attempted this run: **No**
+- Provider response status: **N/A**
 - On-page success confirmation visible: **Pass**
 - Delivery-test runtime error: **None**
 
