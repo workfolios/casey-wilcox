@@ -3,6 +3,10 @@ name: Publish Stage One Preview Branch
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "docs/**"
+      - "DEPLOYMENT_STATUS.md"
+      - "README.md"
   workflow_dispatch:
 
 permissions:
@@ -32,6 +36,12 @@ jobs:
 
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
+
+      - name: Audit locked dependency graph
+        run: npm audit --audit-level=high
+
+      - name: Validate browser-QA script syntax
+        run: node --check scripts/live-stage-one-qa.mjs
 
       - name: Validate source
         run: npm run lint
