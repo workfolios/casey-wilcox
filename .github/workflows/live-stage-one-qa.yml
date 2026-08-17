@@ -30,13 +30,23 @@ jobs:
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Determine one-time Formspree acceptance check
+        id: form_delivery
+        run: |
+          if [ -f docs/live-qa/FORM_DELIVERY_ACCEPTED.md ]; then
+            echo "required=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "required=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install representative browser engines
         run: npx playwright install --with-deps chromium firefox webkit
 
-      - name: Run live HTTP, responsive, interaction, and browser QA
+      - name: Run live HTTP, responsive, interaction, browser, and form QA
         env:
           LIVE_URL: https://workfolios.github.io/casey-wilcox/
           QA_OUTPUT: ${{ github.workspace }}/qa-output
+          FORM_DELIVERY_TEST_REQUIRED: ${{ steps.form_delivery.outputs.required }}
         run: node scripts/live-stage-one-qa.mjs
 
       - name: Upload browser-QA evidence
@@ -86,6 +96,17 @@ jobs:
 
           if [ ! -f docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt ]; then
             printf '%s\n' "$QA_RUN_ID" > docs/live-qa/FIRST_EVIDENCE_RUN_ID.txt
+          fi
+
+          if node -e "const fs=require('fs'); const r=JSON.parse(fs.readFileSync('qa-output/results.json','utf8')); process.exit(r.formDelivery?.attempted && r.formDelivery?.accepted && r.formDelivery?.confirmationVisible ? 0 : 1)"; then
+            cat > docs/live-qa/FORM_DELIVERY_ACCEPTED.md <<EOF
+          # Formspree Provider Acceptance Verification
+
+          - Workflow run ID: \`${QA_RUN_ID}\`
+          - Controlled submission: **Accepted by provider**
+          - On-page confirmation: **Visible**
+          - Human receipt confirmation: **Pending owner confirmation**
+          EOF
           fi
 
           git add docs/live-qa
