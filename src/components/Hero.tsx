@@ -9,8 +9,8 @@ import portrait4x5 from "../assets/casey-wilcox-bio-portrait-4x5.webp";
 
 export default function Hero() {
   return (
-    <section 
-      id="home" 
+    <section
+      id="home"
       className="relative bg-navy-950 text-white pt-8 pb-8 md:pt-12 md:pb-12 lg:pt-24 lg:pb-24 overflow-hidden"
       aria-labelledby="hero-heading"
     >
@@ -22,8 +22,8 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-16 items-center">
           <div className="lg:col-span-7 flex flex-col items-start">
-            <h1 
-              id="hero-heading" 
+            <h1
+              id="hero-heading"
               className="font-serif text-[32px] md:text-[44px] lg:text-7xl font-bold leading-[1.1] md:leading-[1.08] tracking-tight text-white max-w-xl md:max-w-2xl lg:max-w-3xl mb-3 md:mb-4 lg:mb-8"
             >
               {HERO_DATA.headline}
@@ -34,6 +34,13 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center px-6 py-4 bg-white border border-white text-navy-950 font-sans text-sm font-bold tracking-widest uppercase hover:bg-transparent hover:border-wine-700 hover:text-white active:bg-white/10 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 focus:ring-offset-navy-950"
+              >
+                Connect
+              </a>
+
               <a
                 href="#support-areas"
                 className="inline-flex items-center justify-center space-x-2 px-6 py-4 bg-transparent hover:bg-white/10 active:bg-white/15 text-white font-sans text-sm font-semibold tracking-wide border border-white/30 hover:border-white transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-wine-700 focus:ring-offset-2 focus:ring-offset-navy-950"
@@ -52,7 +59,7 @@ export default function Hero() {
                   alt="Casey Wilcox Portrait — Digital presence and inquiry workflow review specialist in Denver, Colorado"
                   width="480"
                   height="600"
-                  className="w-full h-auto object-cover border border-navy-800 grayscale-[5%] hover:grayscale-0 transition-all duration-700"
+                  className="w-full h-auto object-cover border border-navy-800 grayscale-[5%] [@media(hover:hover)]:hover:grayscale-0 transition-[filter] duration-700 motion-reduce:transition-none"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
