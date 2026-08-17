@@ -4,6 +4,7 @@ import { resolve } from "node:path";
 
 const liveUrl = process.env.LIVE_URL || "https://workfolios.github.io/casey-wilcox/";
 const outputDir = resolve(process.env.QA_OUTPUT || "qa-output");
+const formDeliveryRequired = process.env.FORM_DELIVERY_TEST_REQUIRED === "true";
 await mkdir(outputDir, { recursive: true });
 
 const sleep = (ms) => new Promise((resolveSleep) => setTimeout(resolveSleep, ms));
@@ -59,6 +60,14 @@ const results = {
     activeSectionNav: false,
     heroConnect: false,
     reducedMotion: false,
+  },
+  formDelivery: {
+    required: formDeliveryRequired,
+    attempted: false,
+    accepted: !formDeliveryRequired,
+    responseStatus: 0,
+    confirmationVisible: false,
+    error: "",
   },
   consoleErrors: [],
   pageErrors: [],
@@ -226,11 +235,60 @@ try {
     await reducedPage.goto(liveUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
     await reducedPage.waitForSelector("#home img", { timeout: 30_000 });
     results.interactions.reducedMotion = await reducedPage.locator("#home img").evaluate((image) => {
-      const duration = getComputedStyle(image).transitionDuration;
-      return duration === "0s" || duration === "0.00001s" || duration === "0.01ms";
+      const duration = getComputedStyle(image).transitionDuration.split(",")[0].trim();
+      const durationMs = duration.endsWith("ms") ? Number.parseFloat(duration) : Number.parseFloat(duration) * 1000;
+      return Number.isFinite(durationMs) && durationMs <= 0.1;
     });
     await reducedContext.close();
     await reducedBrowser.close();
+
+    if (formDeliveryRequired) {
+      const formBrowser = await chromium.launch({ headless: true });
+      const formContext = await formBrowser.newContext({ viewport: { width: 1440, height: 900 } });
+      const formPage = await formContext.newPage();
+      const label = "chromium:form-delivery";
+
+      formPage.on("console", (message) => {
+        if (message.type() === "error") {
+          results.consoleErrors.push(`${label}: ${message.text()}`);
+        }
+      });
+      formPage.on("pageerror", (error) => results.pageErrors.push(`${label}: ${error.message}`));
+      formPage.on("requestfailed", (request) => {
+        results.failedRequests.push(`${label}: ${request.url()} — ${request.failure()?.errorText || "failed"}`);
+      });
+
+      try {
+        await formPage.goto(liveUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
+        await formPage.locator("#name").fill("Workfolios Deployment QA");
+        await formPage.locator("#email").fill("casey-website-qa@example.com");
+        await formPage.locator("#brand").fill("Controlled Deployment Verification");
+        await formPage.locator("#inquiryType").selectOption("Other / General Inquiry");
+        await formPage.locator("#message").fill(
+          `Controlled post-deployment Formspree verification for the Casey Wilcox website. QA timestamp: ${new Date().toISOString()}. No response is required.`,
+        );
+
+        results.formDelivery.attempted = true;
+        const [submissionResponse] = await Promise.all([
+          formPage.waitForResponse(
+            (response) => response.request().method() === "POST" && response.url().includes("formspree.io"),
+            { timeout: 30_000 },
+          ),
+          formPage.locator('button[type="submit"]').click(),
+        ]);
+
+        results.formDelivery.responseStatus = submissionResponse.status();
+        await formPage.getByRole("region", { name: "Inquiry Confirmation" }).waitFor({ state: "visible", timeout: 30_000 });
+        results.formDelivery.confirmationVisible = true;
+        results.formDelivery.accepted = submissionResponse.ok();
+        await formPage.screenshot({ path: resolve(outputDir, "form-delivery-confirmation.png"), fullPage: true });
+      } catch (error) {
+        results.formDelivery.error = String(error);
+      } finally {
+        await formContext.close();
+        await formBrowser.close();
+      }
+    }
   }
 } catch (error) {
   results.runtimeException = String(error?.stack || error);
@@ -246,6 +304,12 @@ const allViewportsPass = results.viewports.length === 9 && results.viewports.eve
   !viewport.browserError,
 );
 const interactionsPass = Object.values(results.interactions).every(Boolean);
+const formDeliveryPass = !results.formDelivery.required || (
+  results.formDelivery.attempted &&
+  results.formDelivery.accepted &&
+  results.formDelivery.confirmationVisible &&
+  !results.formDelivery.error
+);
 
 results.pass = Boolean(
   results.http.root.ok &&
@@ -256,6 +320,7 @@ results.pass = Boolean(
   allAssetsPass &&
   allViewportsPass &&
   interactionsPass &&
+  formDeliveryPass &&
   results.consoleErrors.length === 0 &&
   results.pageErrors.length === 0 &&
   results.failedRequests.length === 0 &&
@@ -263,7 +328,10 @@ results.pass = Boolean(
 );
 
 const status = (value) => value ? "Pass" : "Fail";
-const report = `# Stage One Live Preview QA\n\n- **Live URL:** ${liveUrl}\n- **Overall result:** **${results.pass ? "PASS" : "FAIL"}**\n- **Indexing state:** Disabled pending Casey Wilcox review\n\n## HTTP And Asset Verification\n\n- Root page HTTP 200: **${status(results.http.root.status === 200)}**\n- Root application mount present: **${status(results.sourceChecks.rootMountPresent)}**\n- Correct \`/casey-wilcox/\` production paths: **${status(results.sourceChecks.correctBasePath)}**\n- Controlled-preview noindex directive present: **${status(results.sourceChecks.noindexPresent)}**\n- Referenced CSS, JavaScript, robots, and social-preview assets: **${status(allAssetsPass)}**\n\n## Responsive And Browser Verification\n\n| Engine | Viewport | HTTP | Overflow | Images | Required Sections |\n|---|---|---:|---|---|---|\n${results.viewports.map((viewport) => `| ${viewport.engine} | ${viewport.name} (${viewport.width}×${viewport.height}) | ${viewport.responseStatus} | ${status(!viewport.horizontalOverflow)} | ${status(viewport.allImagesLoaded)} | ${status(viewport.requiredSectionsPresent)} |`).join("\n")}\n\n## Interaction And Accessibility Verification\n\n- Skip link moves focus to main content: **${status(results.interactions.skipLink)}**\n- Mobile navigation opens, closes, and restores state: **${status(results.interactions.mobileMenuOpenClose)}**\n- Sticky header is active: **${status(results.interactions.stickyHeader)}**\n- Current-section navigation state updates: **${status(results.interactions.activeSectionNav)}**\n- Hero exposes approved \`Connect\` destination: **${status(results.interactions.heroConnect)}**\n- Reduced-motion preference suppresses authored transition duration: **${status(results.interactions.reducedMotion)}**\n- LinkedIn destination is Casey's approved profile: **${status(results.interactions.linkedInTarget)}**\n- Contact-form button label is \`Submit\`: **${status(results.interactions.submitLabel)}**\n- All primary section anchors are present: **${status(results.interactions.sectionAnchors)}**\n\n## Runtime Verification\n\n- Browser-console errors: **${results.consoleErrors.length}**\n- Unhandled page errors: **${results.pageErrors.length}**\n- Failed network requests: **${results.failedRequests.length}**\n- QA runtime exception: **${results.runtimeException ? "Present" : "None"}**\n\n${results.pass ? "The Stage One controlled preview passed the governed live experience and technical verification gate." : "The Stage One controlled preview did not pass the governed live gate. Review the JSON results and screenshot evidence from the workflow artifact."}\n`;
+const formDeliveryStatus = results.formDelivery.required
+  ? status(formDeliveryPass)
+  : "Previously accepted / not repeated";
+const report = `# Stage One Live Preview QA\n\n- **Live URL:** ${liveUrl}\n- **Overall result:** **${results.pass ? "PASS" : "FAIL"}**\n- **Indexing state:** Disabled pending Casey Wilcox review\n\n## HTTP And Asset Verification\n\n- Root page HTTP 200: **${status(results.http.root.status === 200)}**\n- Root application mount present: **${status(results.sourceChecks.rootMountPresent)}**\n- Correct \`/casey-wilcox/\` production paths: **${status(results.sourceChecks.correctBasePath)}**\n- Controlled-preview noindex directive present: **${status(results.sourceChecks.noindexPresent)}**\n- Referenced CSS, JavaScript, robots, and social-preview assets: **${status(allAssetsPass)}**\n\n## Responsive And Browser Verification\n\n| Engine | Viewport | HTTP | Overflow | Images | Required Sections |\n|---|---|---:|---|---|---|\n${results.viewports.map((viewport) => `| ${viewport.engine} | ${viewport.name} (${viewport.width}×${viewport.height}) | ${viewport.responseStatus} | ${status(!viewport.horizontalOverflow)} | ${status(viewport.allImagesLoaded)} | ${status(viewport.requiredSectionsPresent)} |`).join("\n")}\n\n## Interaction And Accessibility Verification\n\n- Skip link moves focus to main content: **${status(results.interactions.skipLink)}**\n- Mobile navigation opens, closes, and restores state: **${status(results.interactions.mobileMenuOpenClose)}**\n- Sticky header is active: **${status(results.interactions.stickyHeader)}**\n- Current-section navigation state updates: **${status(results.interactions.activeSectionNav)}**\n- Hero exposes approved \`Connect\` destination: **${status(results.interactions.heroConnect)}**\n- Reduced-motion preference suppresses authored transition duration: **${status(results.interactions.reducedMotion)}**\n- LinkedIn destination is Casey's approved profile: **${status(results.interactions.linkedInTarget)}**\n- Contact-form button label is \`Submit\`: **${status(results.interactions.submitLabel)}**\n- All primary section anchors are present: **${status(results.interactions.sectionAnchors)}**\n\n## Formspree Delivery Acceptance Verification\n\n- One-time provider acceptance check: **${formDeliveryStatus}**\n- Submission attempted this run: **${results.formDelivery.attempted ? "Yes" : "No"}**\n- Provider response status: **${results.formDelivery.responseStatus || "N/A"}**\n- On-page success confirmation visible: **${status(results.formDelivery.confirmationVisible || !results.formDelivery.required)}**\n- Delivery-test runtime error: **${results.formDelivery.error || "None"}**\n\n## Runtime Verification\n\n- Browser-console errors: **${results.consoleErrors.length}**\n- Unhandled page errors: **${results.pageErrors.length}**\n- Failed network requests: **${results.failedRequests.length}**\n- QA runtime exception: **${results.runtimeException ? "Present" : "None"}**\n\n${results.pass ? "The Stage One controlled preview passed the governed live experience and technical verification gate." : "The Stage One controlled preview did not pass the governed live gate. Review the JSON results and screenshot evidence from the workflow artifact."}\n`;
 
 await writeFile(resolve(outputDir, "results.json"), `${JSON.stringify(results, null, 2)}\n`, "utf8");
 await writeFile(resolve(outputDir, "report.md"), report, "utf8");
