@@ -11,7 +11,11 @@
   },
   "sourceChecks": {
     "rootMountPresent": true,
-    "noindexPresent": true,
+    "indexingReleased": true,
+    "canonicalPresent": true,
+    "structuredDataPresent": true,
+    "robotsAllowsCrawling": true,
+    "sitemapPublished": true,
     "correctBasePath": true
   },
   "assets": [
@@ -32,6 +36,12 @@
       "status": 200,
       "ok": true,
       "contentType": "text/plain; charset=utf-8"
+    },
+    {
+      "url": "https://workfolios.github.io/casey-wilcox/sitemap.xml",
+      "status": 200,
+      "ok": true,
+      "contentType": "application/xml"
     },
     {
       "url": "https://workfolios.github.io/casey-wilcox/casey-wilcox-social-preview.webp",

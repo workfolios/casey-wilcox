@@ -1,16 +1,20 @@
-# Stage One Live Preview QA
+# Casey Wilcox Public Search Live QA
 
 - **Live URL:** https://workfolios.github.io/casey-wilcox/
 - **Overall result:** **PASS**
-- **Indexing state:** Disabled pending Casey Wilcox review
+- **Indexing state:** Enabled for public crawling and indexing
 
-## HTTP And Asset Verification
+## HTTP, Search Discovery And Asset Verification
 
 - Root page HTTP 200: **Pass**
 - Root application mount present: **Pass**
 - Correct `/casey-wilcox/` production paths: **Pass**
-- Controlled-preview noindex directive present: **Pass**
-- Referenced CSS, JavaScript, robots, and social-preview assets: **Pass**
+- Public `index, follow` directive present with no `noindex`: **Pass**
+- Self-referential canonical present: **Pass**
+- Verified WebPage + Person structured data present: **Pass**
+- `robots.txt` allows crawling and advertises sitemap: **Pass**
+- `sitemap.xml` publishes canonical Casey URL: **Pass**
+- Referenced CSS, JavaScript, robots, sitemap, and social-preview assets: **Pass**
 
 ## Responsive And Browser Verification
 
@@ -53,4 +57,4 @@
 - Failed network requests: **0**
 - QA runtime exception: **None**
 
-The Stage One controlled preview passed the governed live experience and technical verification gate.
+The Casey Wilcox public-search release passed the governed live SEO, experience, and technical verification gate.
