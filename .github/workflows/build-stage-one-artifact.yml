@@ -52,8 +52,10 @@ jobs:
           test -f dist/index.html
           test -f dist/.nojekyll
           test -f dist/robots.txt
+          test -f dist/sitemap.xml
           grep -q '/casey-wilcox/' dist/index.html
-          grep -q 'noindex, nofollow, noarchive, nosnippet' dist/index.html
+          grep -q 'name="robots" content="index, follow"' dist/index.html
+          ! grep -q 'noindex' dist/index.html
           grep -q 'name="description"' dist/index.html
           grep -q 'rel="canonical" href="https://workfolios.github.io/casey-wilcox/"' dist/index.html
           grep -q 'property="og:site_name" content="Casey Wilcox"' dist/index.html
@@ -62,6 +64,11 @@ jobs:
           grep -q '"@type": "WebPage"' dist/index.html
           grep -q '"@type": "Person"' dist/index.html
           grep -q 'https://www.linkedin.com/in/casey-wilcox/' dist/index.html
+          grep -q '^User-agent: \*$' dist/robots.txt
+          grep -q '^Allow: /$' dist/robots.txt
+          ! grep -q '^Disallow: /$' dist/robots.txt
+          grep -q '^Sitemap: https://workfolios.github.io/casey-wilcox/sitemap.xml$' dist/robots.txt
+          grep -q '<loc>https://workfolios.github.io/casey-wilcox/</loc>' dist/sitemap.xml
 
       - name: Upload validated artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

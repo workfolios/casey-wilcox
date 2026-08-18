@@ -56,8 +56,10 @@ jobs:
           test -f dist/index.html
           test -f dist/.nojekyll
           test -f dist/robots.txt
+          test -f dist/sitemap.xml
           grep -q '/casey-wilcox/' dist/index.html
-          grep -q 'noindex, nofollow, noarchive, nosnippet' dist/index.html
+          grep -q 'name="robots" content="index, follow"' dist/index.html
+          ! grep -q 'noindex' dist/index.html
           grep -q 'name="description"' dist/index.html
           grep -q 'rel="canonical" href="https://workfolios.github.io/casey-wilcox/"' dist/index.html
           grep -q 'property="og:site_name" content="Casey Wilcox"' dist/index.html
@@ -66,6 +68,11 @@ jobs:
           grep -q '"@type": "WebPage"' dist/index.html
           grep -q '"@type": "Person"' dist/index.html
           grep -q 'https://www.linkedin.com/in/casey-wilcox/' dist/index.html
+          grep -q '^User-agent: \*$' dist/robots.txt
+          grep -q '^Allow: /$' dist/robots.txt
+          ! grep -q '^Disallow: /$' dist/robots.txt
+          grep -q '^Sitemap: https://workfolios.github.io/casey-wilcox/sitemap.xml$' dist/robots.txt
+          grep -q '<loc>https://workfolios.github.io/casey-wilcox/</loc>' dist/sitemap.xml
 
       - name: Upload validated publication artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -97,7 +104,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b gh-pages
           git add -A
-          git commit -m "Publish Stage One controlled preview"
+          git commit -m "Publish Stage One public search release"
           git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin gh-pages
 
@@ -134,7 +141,7 @@ jobs:
           - Validation result: **${VALIDATE_RESULT}**
           - Publication result: **${PUBLISH_RESULT}**
           - Target branch: \`gh-pages\`
-          - Indexing state: Disabled pending Casey Wilcox review
+          - Indexing state: Enabled for public crawling and indexing
           EOF
 
           git add docs/GH_PAGES_BRANCH_STATUS.md
