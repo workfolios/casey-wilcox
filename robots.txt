@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://workfolios.github.io/casey-wilcox/sitemap.xml
